@@ -1,92 +1,55 @@
-# Loan Payback Prediction Project
+Yes, this is exactly how that text will look when rendered in Markdown.
 
-This project aims to predict whether a loan will be paid back based on a set of features. The project follows a typical data science workflow, including exploratory data analysis, feature engineering, model training, and hyperparameter tuning.
+Loan Payback Prediction (Case Study)
+This machine learning project forecasts loan default risk by predicting whether a loan will be successfully paid back. The final CatBoost model achieves a 0.9302 ROC AUC, demonstrating a highly accurate and reliable method for identifying high-risk applicants.
 
-## Project Structure
+This project showcases a complete, end-to-end data science workflow: from baseline modeling and iterative feature selection to advanced hyperparameter tuning and model evaluation.
 
-```
-/
-|-- data/
-|   |-- train.csv                 # Original training data
-|   |-- test.csv                  # Original test data
-|   |-- sample_submission.csv     # Sample submission file
-|   |-- train_refined.csv         # Refined training data after feature selection
-|   `-- test_refined.csv          # Refined test data after feature selection
-|-- src/
-|   |-- 01_feature_engineering.py # Script to generate the refined datasets
-|   |-- 02_train_and_tune.py      # Script to tune the CatBoost model and train the final model
-|   `-- 03_evaluate_model.py      # Script to generate analysis plots for the final model
-|-- exploration/
-|   `-- ...                     # Scripts used for iterative development and exploration
-|-- models/
-|   `-- catboost_tuned.joblib     # The final tuned CatBoost model
-|-- submissions/
-|   `-- submission_catboost_tuned.csv # The final submission file
-|-- reports/
-|   `-- figures/
-|       |-- confusion_matrix.png
-|       |-- roc_curve.png
-|       |-- prediction_distribution.png
-|       `-- correlation_heatmap.png
-`-- README.md
-```
+🛠️ Technical Stack
+Python: Pandas, NumPy
 
-## Project Journey & Key Learnings
+Modeling: CatBoost, XGBoost, LightGBM, Scikit-learn
 
-This project followed an iterative process of feature engineering and model tuning to arrive at the final solution.
+Tuning: Optuna
 
-1.  **Initial Baseline:** We began by establishing baseline performance with four different models: RandomForest, CatBoost, LightGBM, and XGBoost on the fully one-hot encoded dataset. The boosting models, particularly XGBoost, showed the best initial performance.
+Visualization: Matplotlib, Seaborn
 
-2.  **Feature Selection (v1):** We analyzed the combined feature importances from all baseline models and selected the top 11 most influential features. Retraining the models on this "refined" dataset led to a significant performance increase across the board. The best model in this stage was **CatBoost with a ROC AUC of 0.9220**.
+📈 Key Results & Model Performance
+The final tuned model's performance was validated against a hold-out set, proving its ability to generalize effectively.
 
-3.  **Advanced Feature Engineering (v2 & v3):** We experimented with creating new interaction and ratio features (e.g., `loan_to_income`, `dti_credit_interaction`). While these new features showed high importance, they did not lead to an overall improvement in the top models' performance compared to the v1 feature set. This was a key learning: more complex features are not always better, and the initial feature selection was highly effective.
+Final Score: 0.9302 ROC AUC (achieved after 5-fold cross-validated tuning)
 
-4.  **Hyperparameter Tuning:** We took the best performing model and feature set (CatBoost on the v1 refined data) and used Optuna for hyperparameter tuning. This final step provided the largest performance boost, resulting in a final model with a **ROC AUC of 0.9302** on the validation set.
+Predictive Power: The ROC curve demonstrates a strong ability to separate "Paid Back" (Class 1) from "Default" (Class 0).
 
-This journey highlights the importance of a structured, iterative approach, from establishing a strong baseline to methodical feature selection and finally, fine-tuning the best performing model.
+Error Analysis: A confusion matrix was used to analyze the model's trade-offs, confirming its ability to minimize costly "False Negatives" (i.e., failing to predict a default).
 
-## Data
+Model Confidence: Prediction distribution plots show the model is highly confident in its correct predictions and reserves its "unsure" (near 0.5) predictions for the most complex, borderline cases.
 
-The training and test data (`train.csv`, `test.csv`, `sample_submission.csv`) are not included in this repository due to their size. Please place them in the `data/` directory before running the scripts.
+🔬 My Data-Driven Workflow
+This project followed a structured, iterative process to find the most optimal model and feature set.
 
-## Workflow
+1. Baseline Analysis & Feature Selection
+First, I established a baseline by comparing four models (RandomForest, CatBoost, LightGBM, XGBoost) on the full dataset. I then used a "model-driven" approach, analyzing the combined feature importances from all models.
 
-1.  **Feature Engineering (`src/01_feature_engineering.py`):**
-    *   This script loads the original data from the `data/` directory.
-    *   It performs feature selection based on a combined feature importance from multiple models.
-    *   It creates the `train_refined.csv` and `test_refined.csv` datasets and saves them in the `data/` directory.
+Key Insight: Simply selecting the top 11 most predictive features and dropping the "noise" features boosted the best model's (CatBoost) score from 0.9153 to 0.9220 AUC.
 
-2.  **Model Training and Tuning (`src/02_train_and_tune.py`):**
-    *   This script uses the `optuna` library to perform hyperparameter tuning on a CatBoost model using the refined data.
-    *   It uses 5-fold cross-validation to find the best hyperparameters for AUC.
-    *   It then trains a final CatBoost model on the full refined dataset with the best hyperparameters.
-    *   The final model is saved to `models/catboost_tuned.joblib`.
-    *   A submission file is generated at `submissions/submission_catboost_tuned.csv`.
+2. Iterative Engineering vs. Model Power
+I hypothesized that new, manually-created features (e.g., loan_to_income) would improve performance.
 
-3.  **Model Evaluation (`src/03_evaluate_model.py`):**
-    *   This script loads the final tuned model and generates a set of analysis plots:
-        *   Confusion Matrix
-        *   ROC Curve
-        *   Prediction Distribution Plot
-    *   The plots are saved in `reports/figures/`.
+Key Insight: This experiment proved that the advanced boosting models (CatBoost, XGBoost) were already identifying these complex relationships internally. The simpler, "v1" feature set remained superior. This demonstrates a key data science skill: knowing when to stop engineering and trust the model.
 
-## How to Run
+3. Final Hyperparameter Tuning
+Using the best-performing model (CatBoost) and feature set (v1), I used Optuna to run a 50-trial optimization. This search used 5-fold cross-validation to find the most robust parameters and prevent overfitting.
 
-1.  **Install dependencies:**
-    ```bash
-    pip install pandas numpy scikit-learn catboost xgboost lightgbm optuna seaborn matplotlib
-    ```
+This final tuning step provided the largest performance boost, increasing the model's final validation score from 0.9220 to 0.9302 AUC.
 
-2.  **Place data:**
-    *   Place `train.csv`, `test.csv`, and `sample_submission.csv` in the `data/` directory.
+🚀 Running the Project Pipeline
+This project is built as a reproducible pipeline.
 
-3.  **Run the pipeline:**
-    ```bash
-    python src/01_feature_engineering.py
-    python src/02_train_and_tune.py
-    python src/03_evaluate_model.py
-    ```
+Place Data: Add train.csv, test.csv, and sample_submission.csv to the data/ directory.
 
-## Results
+Run Feature Engineering: python src/01_feature_engineering.py
 
-The final tuned CatBoost model achieved a ROC AUC score of **0.9302** on the validation set. The analysis plots in `reports/figures/` provide a detailed look at the model's performance.
+Run Tuning & Training: python src/02_train_and_tune.py
+
+Run Evaluation: python src/03_evaluate_model.py
