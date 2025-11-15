@@ -1,0 +1,36 @@
+# Data files
+data/
+train_refined.csv
+test_refined.csv
+train_refined_v2.csv
+test_refined_v2.csv
+train_refined_v3.csv
+test_refined_v3.csv
+X_*.csv
+y_*.csv
+
+# Models
+models/
+*.joblib
+
+# Submissions
+submissions/
+*.csv
+
+# Reports
+reports/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# CatBoost training logs
+catboost_info/
+
+# IDE and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
