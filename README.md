@@ -1,5 +1,3 @@
-Yes, this is exactly how that text will look when rendered in Markdown.
-
 Loan Payback Prediction (Case Study)
 This machine learning project forecasts loan default risk by predicting whether a loan will be successfully paid back. The final CatBoost model achieves a 0.9302 ROC AUC, demonstrating a highly accurate and reliable method for identifying high-risk applicants.
 
